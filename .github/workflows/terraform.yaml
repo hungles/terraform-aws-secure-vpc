@@ -1,0 +1,43 @@
+name: "Terraform CI"
+
+# El pipeline se ejecutará en cada Push a la rama principal o cuando se abra un Pull Request
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: "Format & Validate"
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código del repositorio en la máquina virtual del Action
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Instala la versión de Terraform configurada en la máquina virtual
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0" # Puedes usar una versión específica o dejar que lea versions.tf
+
+      # 3. Inicializa el directorio de trabajo (necesario para descargar proveedores antes de validar)
+      - name: Terraform Init
+        run: terraform init -backend=false
+        # Usamos -backend=false porque en el pipeline de validación no necesitamos conectarnos
+        # a un bucket de S3 o backend real de Terraform.
+
+      # 4. Verifica el formato oficial de HashiCorp (falla si el código no está formateado con 'terraform fmt')
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      # 5. Valida la sintaxis del código de forma interna
+      - name: Terraform Validate
+        run: terraform validate -no-color
