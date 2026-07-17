@@ -23,8 +23,8 @@ module "vpc_dev" {
 
   # Tags organizacionales
   tags = {
-    Project   = "SecureInfrastructure"
-    Owner     = "DevOpsTeam"
+    Project    = "SecureInfrastructure"
+    Owner      = "DevOpsTeam"
     CostCenter = "101-R&D"
   }
 }
