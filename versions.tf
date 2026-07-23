@@ -8,7 +8,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.0.0" # Bloqueamos a la versión mayor v5 para aprovechar las últimas características de AWS
+      version = ">= 5.0.0" # Bloqueamos a la version mayor v5 para aprovechar las últimas características de AWS
     }
   }
 }
